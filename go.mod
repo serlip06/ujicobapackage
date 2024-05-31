@@ -4,7 +4,6 @@ go 1.22.1
 
 require (
 	github.com/aiteung/atdb v0.1.7
-	github.com/indrariksa/cobapakcage v0.0.7
 	go.mongodb.org/mongo-driver v1.15.0
 )
 
