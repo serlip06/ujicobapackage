@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/indrariksa/cobapakcage/model"
+	"github.com/serlip06/ujicobapackage/model"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
