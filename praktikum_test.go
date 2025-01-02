@@ -58,7 +58,7 @@ func TestGetKaryawanFromPhoneNumber(t *testing.T) {
 }
 
 func TestGetPresensiFromID(t *testing.T) {
-	id := "65fd445a14f70218993daefa" //yang di hapus ini idnya si drakenya ingett
+	id := "665991fb37646aa6f1c8a892" 
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		t.Fatalf("error converting id to ObjectID: %v", err)

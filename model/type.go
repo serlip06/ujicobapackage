@@ -35,3 +35,24 @@ type Presensi struct {
 }
 //karyawan berasal dari tabel karyawan di atas 
 //moggo db bentuk satabasenya objek dengan tipe code json, struct itu berhubungan satu sama lain
+
+//untuk uji coba login user
+// type User struct {
+// 	ID       string `bson:"_id,omitempty" json:"id"`
+// 	Username string `bson:"username,omitempty" json:"username"`
+// 	Email    string `bson:"email,omitempty" json:"email"`
+// 	Password string `bson:"password,omitempty" json:"password"`
+// }
+
+// untuk register user 
+// type UserRequest struct {
+// 	Username string `json:"username"`
+// 	Email    string `json:"email"`
+// 	Password string `json:"password"`
+// }
+
+// untuk admin 
+type Admin struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
