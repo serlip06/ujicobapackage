@@ -3,10 +3,12 @@ package _714220023
 import (
 	"fmt"
 	"testing"
-
+	"context"
 	"github.com/serlip06/ujicobapackage/model"
 	"github.com/serlip06/ujicobapackage/module"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestInsertPresensi(t *testing.T) {
@@ -35,11 +37,11 @@ func TestInsertPresensi(t *testing.T) {
 	phonenumber := "6811110023231"
 	checkin := "masuk"
 	biodata := model.Karyawan{
-		Nama:        "Ruud Gullit",
+		Nama:         "Ruud Gullit",
 		Phone_number: "628456456222222",
-		Jabatan:     "Football Player",
-		Jam_kerja:   []model.JamKerja{jamKerja1, jamKerja2},
-		Hari_kerja:  []string{"Senin", "Selasa"},
+		Jabatan:      "Football Player",
+		Jam_kerja:    []model.JamKerja{jamKerja1, jamKerja2},
+		Hari_kerja:   []string{"Senin", "Selasa"},
 	}
 	insertedID, err := module.InsertPresensi(module.MongoConn, "presensi", long, lat, lokasi, phonenumber, checkin, biodata)
 	if err != nil {
@@ -58,7 +60,7 @@ func TestGetKaryawanFromPhoneNumber(t *testing.T) {
 }
 
 func TestGetPresensiFromID(t *testing.T) {
-	id := "665991fb37646aa6f1c8a892" 
+	id := "665991fb37646aa6f1c8a892"
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		t.Fatalf("error converting id to ObjectID: %v", err)
@@ -92,4 +94,52 @@ func TestDeletePresensiByID(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected data to be deleted, but it still exists")
 	}
+}
+
+func TestSignupHandler(t *testing.T) {
+	// Setup test database
+	db := module.MongoConnectdb("tesdb2024")
+
+	// Test case input
+	req := model.SignupRequest{
+		Username: "testuser",
+		Password: "testpassword",
+		Role:     "customer",
+	}
+
+	// Call the signupHandler function
+	message, err := module.SignupHandler(req, db)
+
+	// Test if there were no errors
+	if err != nil {
+		t.Errorf("Error in signupHandler: %v", err)
+	}
+
+	// Test if the message is as expected
+	expectedMessage := "Registration submitted, waiting for admin approval"
+	if message != expectedMessage {
+		t.Errorf("Expected message: %s, got: %s", expectedMessage, message)
+	}
+
+	// Verify if the user was inserted into the database
+	collection := db.Collection("unverified_users")
+	var result model.UnverifiedUsers
+	err = collection.FindOne(context.TODO(), bson.M{"username": req.Username}).Decode(&result)
+	if err != nil {
+		t.Fatalf("Failed to find user in the database: %v", err)
+	}
+
+	// Check if the user data is correct
+	if result.Username != req.Username {
+		t.Errorf("Expected username: %s, got: %s", req.Username, result.Username)
+	}
+
+	// Verify if the password is correctly hashed
+	err = bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(req.Password))
+	if err != nil {
+		t.Fatalf("Password hash mismatch: %v", err)
+	}
+
+	// Print confirmation message
+	fmt.Printf("User %s successfully registered and saved to the database.\n", req.Username)
 }

@@ -2,6 +2,7 @@ package model
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type Karyawan struct {
@@ -36,20 +37,43 @@ type Presensi struct {
 //karyawan berasal dari tabel karyawan di atas 
 //moggo db bentuk satabasenya objek dengan tipe code json, struct itu berhubungan satu sama lain
 
-//untuk uji coba login user
-// type User struct {
-// 	ID       string `bson:"_id,omitempty" json:"id"`
-// 	Username string `bson:"username,omitempty" json:"username"`
-// 	Email    string `bson:"email,omitempty" json:"email"`
-// 	Password string `bson:"password,omitempty" json:"password"`
-// }
+//untuk uji coba login user (kalo resminya PendingRegistration)
+type UnverifiedUsers struct {
+    ID          string    `bson:"_id,omitempty" json:"id,omitempty"` // ID unik dari MongoDB
+    Username    string    `bson:"username" json:"username"`          // Username pengguna
+    Password    string    `bson:"password" json:"password"`          // Password dalam bentuk hash
+    Role        string    `bson:"role" json:"role"`                  // Peran pengguna (customer, kasir, operator)
+    SubmittedAt time.Time `bson:"submitted_at" json:"submitted_at"`  // Waktu registrasi
+}
 
-// untuk register user 
-// type UserRequest struct {
-// 	Username string `json:"username"`
-// 	Email    string `json:"email"`
-// 	Password string `json:"password"`
-// }
+//untuk pengguna (kalo resminya User)
+type Pengguna struct {
+    ID        string    `bson:"_id,omitempty" json:"id,omitempty"` // ID unik dari MongoDB
+    Username  string    `bson:"username" json:"username"`          // Username pengguna
+    Password  string    `bson:"password" json:"password"`          // Password dalam bentuk hash
+    Role      string    `bson:"role" json:"role"`                  // Peran pengguna (admin, customer, kasir, operator)
+    CreatedAt time.Time `bson:"created_at" json:"created_at"`      // Waktu pembuatan akun
+}
+// permintaan untuk registrasi 
+// RegisterRequest (resmi) SignupRequest(ujicoba)
+type SignupRequest struct {
+    Username string `json:"username"`
+    Password string `json:"password"`
+    Role     string `json:"role"`
+}
+
+// permintaan untuk login (kalo di dbresmi namaya :LoginRequest )
+type SigninRequest struct {
+    Username string `json:"username"` // Username pengguna
+    Password string `json:"password"` // Password pengguna
+}
+
+//respon sis sitemnya kalo ada yang request mau daftar (kalo resminya namanya Response)
+type AccessResponse struct {
+    Status  string `json:"status"`  // Status operasi (success, error)
+    Message string `json:"message"` // Pesan deskripsi
+    // Data    any    `json:"data"`    // Data tambahan (opsional)
+}
 
 // untuk admin 
 type Admin struct {
