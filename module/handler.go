@@ -74,6 +74,7 @@ func ConfirmRegistration(id string, db *mongo.Database) (model.UnverifiedUsers, 
 
 //handler registernya aja 
 
+
 // Handler untuk menerima input registrasi
 func SignupHandler(req model.SignupRequest, db *mongo.Database) (string, error) {
 	// Proses hash password
@@ -91,7 +92,7 @@ func SignupHandler(req model.SignupRequest, db *mongo.Database) (string, error) 
 	}
 
 	// Panggil fungsi untuk menyimpan data pengguna
-	err =  saveUnverifiedUsers(registration, db)
+	err = SaveUnverifiedUsers(registration, db)
 	if err != nil {
 		return "", fmt.Errorf("failed to save registration: %v", err)
 	}

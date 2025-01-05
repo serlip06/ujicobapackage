@@ -105,11 +105,12 @@ func UpdatePresensi(db *mongo.Database, col string, id primitive.ObjectID, long 
 		return
 	}
 	if result.ModifiedCount == 0 {
-		err = errors.New("No data has been changed with the specified ID")
+		err = errors.New("no data has been changed with the specified ID") // Perbaikan di sini
 		return
 	}
 	return nil
 }
+
 
 func DeletePresensiByID(_id primitive.ObjectID, db *mongo.Database, col string) error {
 	karyawan := db.Collection(col)
