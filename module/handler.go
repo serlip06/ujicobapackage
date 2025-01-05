@@ -29,7 +29,7 @@ func MongoConnectdb(dbname string) (db *mongo.Database) {
 // Contoh menyimpan data registrasi
 
 //untuk resminya namanya savePendingRegistration namacolection-nya = pending_registrations
-func saveUnverifiedUsers(registration model.UnverifiedUsers, db*mongo.Database) error {
+func SaveUnverifiedUsers(registration model.UnverifiedUsers, db*mongo.Database) error {
     collection := db.Collection("unverified_users")
     _, err := collection.InsertOne(context.Background(), registration)
     return err
